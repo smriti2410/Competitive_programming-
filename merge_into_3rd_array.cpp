@@ -37,6 +37,8 @@ int main()
 
 	vector<int> A(m),B(n);
 
+	//do not use for(auto i : A) for input as it creates a copy and not a refernce to the elements 
+
 	for (int i = 0; i < m; i++) {
         cin >> A[i];
     }
@@ -44,7 +46,6 @@ int main()
     for (int i = 0; i < n; i++) {
         cin >> B[i];
     }
-
 
 
 	vector<int> C=merge(A,B,m,n);
