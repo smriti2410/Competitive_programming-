@@ -3,6 +3,7 @@ using namespace std;
 
 // time complexity = O(n^2)
 // space comlexity = O(1)
+// pick up adj pairs of elements swap if a[i]>a[i+1], pushing the larger element at end 
 
 void bubble_sort(vector<int>& arr) {
     int n = arr.size();
