@@ -43,77 +43,70 @@
 
 
 #include<bits/stdc++.h>
+
 using namespace std;
 
-void find_divisible_subset(vector<int> &arr,int n){
+void find_divisible_subset(vector<int>& a,int n) {
+    bool found = false;
 
-	unordered_map<int,int> prefix_mod;
-	prefix_mod[0]=-1; //when prefix is itself divisible by n
+    // Check if any single element is divisible by n
+    for (int i = 1; i <= n; ++i) {
+        if (a[i] % n == 0 && !found) {
+            cout << "1\n" << i << "\n";
+            found = true;
+            return;
+        }
+    }
 
-	int prefix_sum=0;
+    // If no single element is divisible, find a subset using prefix sums
+    vector<int> f(n + 1, 0);
+    unordered_map<int, int> was;
+    was[0] = 0;
 
-//looping through array to calculate prefix sum
-//Adding N ensures that if the result of prefix_sum % N was negative, it shifts it into the range [0, N).
-// If the result was already positive, adding N simply shifts it into the range [N, 2N).
+    int i;
+    for (i = 1; i <= n; ++i) {
+        f[i] = (f[i - 1] + a[i]) % n;
+        if (f[i] < 0) f[i] += n; // Handle negative remainders
+        if (was.find(f[i]) != was.end()) break;
+        was[f[i]] = i;
+    }
 
-	for(int i=0;i<n;i++){
-
-		prefix_sum+=arr[i];
-		int mod =((prefix_sum%n)+n)%n;
-
-	// condition when remiander found in map
-	    if(prefix_mod.find(mod)!=prefix_mod.end()){
-		int start = prefix_mod[mod]+1;
-		int end = i;
-
-		//printing the size of the subset
-
-		cout<<end-start+1<<endl;
-
-
-		//printing the indexes of elements of subset
-
-		for(int j=start;j<=end;j++){
-			cout<<j+1<<" "; // 1-based index therefore adding one
-		}
-		cout<<endl;
-		return;
- 		}
-
-	//if the remainder entry not found in map , then add it along with the index till which prefix sum when divided by n gives remiander mod
-
-	else {
-		prefix_mod[mod]=i;
-	}
-}
+    int j = was[f[i]];
+    cout << i - j << "\n";
+    for (++j; j <= i; ++j) {
+        cout << j;
+        if (j != i) cout << " ";
+    }
+    cout << "\n";
 }
 
+int main() {
 
+	freopen("input.txt","r",stdin);
+	freopen("output.txt","w",stdout);
+    int tn;
+    cin >> tn;
+    int sum = 0;
+
+    for (int ti = 0; ti < tn; ++ti) {
+        int n;
+        cin >> n;
+        sum += n;
+        vector<int> a(n + 1);
+
+        for (int i = 1; i <= n; ++i) {
+            cin >> a[i];
+        }
+
+        find_divisible_subset(a,n);
+    }
+
+  
+    return 0;
+}
 
 //The prefix sum is a concept in mathematics and computer science where we compute the cumulative sum of elements in an array up to a certain index.
 
-int main()
-{
-	freopen("input.txt","r",stdin);
-	freopen("output.txt","w",stdout);
-
-	// number of test cases
-	int t;
-	cin>>t;
+	
 
 
-	while(t--){
-
-		int n;
-		cin>>n;
-		vector<int> arr(n);
-
-		for(int i=0;i<n;i++){
-			cin>>arr[i];
-		}
-
-		find_divisible_subset(arr,n);
-
-	}
-
-}
